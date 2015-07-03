@@ -1,4 +1,4 @@
-﻿/**
+/**
 * jQuery animated
 * //random in effect
 * $("form:first").animated("show" | "hide" | "special" | "[animateClassName]", function(isVisible, className){
@@ -8,7 +8,8 @@
 var Animated = function (element, className, callback) {
     var element = this.$element = $(element),
         animatedClass = "animated " + className,
-        animationEndEvents = "animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd ", //transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
+        animationEndEvents = "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", 
+            //transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
         effects = this.effects,
         isShowing = effects.show.contains(className) || effects.special.contains(className) || false;
 
