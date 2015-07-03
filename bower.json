@@ -18,5 +18,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "animate.css": "~3.3.0",
+    "jquery": "~2.1.4"
+  }
 }

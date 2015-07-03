@@ -161,7 +161,8 @@ ClientBin/
 node_modules/
 *.dat
 public/
-
+.bowerrc
+/bower_components
 
 # RIA/Silverlight projects
 Generated_Code/
