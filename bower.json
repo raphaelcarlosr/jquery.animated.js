@@ -1,0 +1,22 @@
+{
+  "name": "jquery.animated",
+  "main": "jquery.animated.js",
+  "version": "1.0.0",
+  "authors": [
+    "Raphael Carlos Rego <raphaelcarlosr@gmail.com>"
+  ],
+  "description": "jQuery for animate.css",
+  "keywords": [
+    "jquery",
+    "animate.css"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/raphaelcarlosr/jquery.animated.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
