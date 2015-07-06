@@ -1,14 +1,14 @@
 /**
-* jQuery animated
+* jQuery animate
 * //random in effect
-* $("form:first").animated("show" | "hide" | "special" | "[animateClassName]", function(isVisible, className){
+* $("form:first").animate("show" | "hide" | "special" | "[animateClassName]", function(isVisible, className){
 *     console.log(this, isVisible, className)
 * })
 */
-var Animated = function (element, className, callback) {
+var Animate = function (element, className, callback) {
     var element = this.$element = $(element),
         animatedClass = "animated " + className,
-        animationEndEvents = "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", 
+        animationEndEvents = "animationend webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend", 
             //transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
         effects = this.effects,
         isShowing = effects.show.contains(className) || effects.special.contains(className) || false;
@@ -19,12 +19,12 @@ var Animated = function (element, className, callback) {
     if (this.hasCssAnimations()) {
         //trigger start
         this.$element.trigger(
-           $.Event('animated.start', {
+           $.Event('animate:start', {
                "isShowing": isShowing,
                "className": className
            })
         );
-        //on animation end
+        //on animate end
         element.on(animationEndEvents, function () {
             var $this = $(this),
                 isVisible = $this.is(':visible');
@@ -38,7 +38,7 @@ var Animated = function (element, className, callback) {
             callback.apply(this, [isVisible, className]);
             //trigger end
             $this.trigger(
-               $.Event('animated.end', {
+               $.Event('animate:end', {
                    "isShowing": isShowing,
                    "className": className
                })
@@ -52,7 +52,7 @@ var Animated = function (element, className, callback) {
                 callback.apply(this, [true, "fadeIn"]);
                 //trigger
                 element.trigger(
-                   $.Event('animated.end', {
+                   $.Event('animate:end', {
                        "isShowing": isShowing,
                        "className": className
                    })
@@ -64,7 +64,7 @@ var Animated = function (element, className, callback) {
                 callback.apply(this, [false, "fadeOut"]);
                 //trigger
                 element.trigger(
-                   $.Event('animated.end', {
+                   $.Event('animate:end', {
                        "isShowing": isShowing,
                        "className": className
                    })
@@ -76,7 +76,7 @@ var Animated = function (element, className, callback) {
                 callback.apply(this, [$(this).is(':visible'), "shake"]);
                 //trigger
                 element.trigger(
-                   $.Event('animated.end', {
+                   $.Event('animate:end', {
                        "isShowing": isShowing,
                        "className": className
                    })
@@ -86,7 +86,7 @@ var Animated = function (element, className, callback) {
     }
     return this;
 };
-Animated.prototype.hasCssAnimations = function () {
+Animate.prototype.hasCssAnimations = function () {
     if (this._hasCssAnimations !== undefined) return this._hasCssAnimations;
 
     var animation = false,
@@ -112,7 +112,7 @@ Animated.prototype.hasCssAnimations = function () {
     this._hasCssAnimations = animation;
     return animation;
 };
-Animated.prototype.effects = [
+Animate.prototype.effects = [
     "flipInX", "flipOutX",
     "flipInY", "flipOutY",
     "fadeIn", "fadeOut",
@@ -146,20 +146,30 @@ Animated.prototype.effects = [
     "zoomInUp", "zoomOutUp",
     "bounce", "flash", "pulse", "rubberBand", "shake", "swing", "tada", "wobble", "hinge", "flip"
 ];
-Animated.prototype.effects.show = Animated.prototype.effects.filter(function (className) {
+Animate.prototype.effects.show = Animate.prototype.effects.filter(function (className) {
     return /In/g.test(className) ? className : false;
 });
-Animated.prototype.effects.hide = Animated.prototype.effects.filter(function (className) {
+Animate.prototype.effects.hide = Animate.prototype.effects.filter(function (className) {
     return /Out/g.test(className) ? className : false;
 });
-Animated.prototype.effects.special = Animated.prototype.effects.filter(function (className) {
+Animate.prototype.effects.special = Animate.prototype.effects.filter(function (className) {
     return /Out|In/g.test(className) || className === "hinge" ? false : className;
 });
-$.fn.animated = function (className, callback) {
+
+//overwrite default jquery animate
+$.fn.__animate = $.fn.animate;
+$.fn.animate = function (className, callback) {
     return this.each(function () {
         var $this = $(this);
-        var data = $this.data('jquery.animated');
-        var effects = Animated.prototype.effects;
+        
+        //default call
+        if($.isPlainObject(className))
+        {
+            return $.fn.__animate.apply(this, arguments);  
+        }
+        
+        var data = $this.data('jquery.animate');
+        var effects = Animate.prototype.effects;
 
         if ($.isArray(className)) className = className.random();
         else if (/show/gi.test(className)) className = effects.show.random();
@@ -167,12 +177,12 @@ $.fn.animated = function (className, callback) {
         else if (/special/gi.test(className)) className = effects.special.random();
         else if (effects.contains(className) == false) throw "Invalid class name: " + className;
 
-        //if (!data) $this.data('jquery.animated', (data = new Animated(this, className, callback)));
-        $this.data('jquery.animated', (data = new Animated(this, className, callback)));
-        //new Animated(this, className, callback);
+        //if (!data) $this.data('jquery.animate', (data = new Animate(this, className, callback)));
+        $this.data('jquery.animate', (data = new Animate(this, className, callback)));
+        //new Animate(this, className, callback);
     })
 };
-$.fn.animated.Constructor = Animated;
+$.fn.animate.Constructor = Animate;
 /**
 * jQuery shake to unsupported browser animations
 */
