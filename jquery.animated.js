@@ -162,13 +162,7 @@ $.fn.animate = function (className, callback, easing, complete) {
     return this.each(function () {
         var $this = $(this);
         var args = Array.prototype.splice.call(arguments);
-        //default call
-        if ($.isPlainObject(className)) 
-        {
-            console.log("default animate", className, callback, easing, complete, args, arguments);
-            return $this.__animate(className, callback, easing, complete);            
-        }
-
+        
         var data = $this.data('jquery.animate');
         var effects = Animate.prototype.effects;
 
@@ -176,6 +170,12 @@ $.fn.animate = function (className, callback, easing, complete) {
         else if (/show/gi.test(className)) className = effects.show.random();
         else if (/hide/gi.test(className)) className = effects.hide.random();
         else if (/special/gi.test(className)) className = effects.special.random();
+        //default call
+        else if ($.isPlainObject(className)) 
+        {
+            console.log("default animate", className, callback, easing, complete, args, arguments);
+            return $this.__animate(className, callback, easing, complete);
+        }
         else if (effects.contains(className) == false) throw "Invalid class name: " + className;
 
         //if (!data) $this.data('jquery.animate', (data = new Animate(this, className, callback)));
