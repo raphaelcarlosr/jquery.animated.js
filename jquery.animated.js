@@ -158,16 +158,17 @@ Animate.prototype.effects.special = Animate.prototype.effects.filter(function (c
 
 //overwrite default jquery animate
 $.fn.__animate = $.fn.animate;
-$.fn.animate = function (className, callback) {
+$.fn.animate = function (className, callback, easing, complete) {
     return this.each(function () {
         var $this = $(this);
-        
+        var args = Array.prototype.splice.call(arguments);
         //default call
-        if($.isPlainObject(className))
+        if ($.isPlainObject(className)) 
         {
-            return $.fn.__animate.apply(this, arguments);  
+            console.log("default animate", className, callback, easing, complete, args, arguments);
+            return $this.__animate(className, callback, easing, complete);            
         }
-        
+
         var data = $this.data('jquery.animate');
         var effects = Animate.prototype.effects;
 
