@@ -173,7 +173,7 @@ $.fn.animate = function (className, callback, easing, complete) {
         //default call
         else if ($.isPlainObject(className)) 
         {
-            console.log("default animate", className, callback, easing, complete, args, arguments);
+            //console.log("default animate", className, callback, easing, complete, args, arguments);
             return $this.__animate(className, callback, easing, complete);
         }
         else if (effects.contains(className) == false) throw "Invalid class name: " + className;
